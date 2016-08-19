@@ -72,11 +72,34 @@ erts_smp_atomic_t erts_dead_ports_ptr; /* To store dying ports during snapshot *
  * each individual BIF does.
  */
 
+/* FIXME: Ugly copy-paste code */
+BIF_RETTYPE spawn_in_jail_4(BIF_ALIST_3)
+{
+    ErlSpawnOpts so;
+    Eterm pid;
+    Eterm jail_id = BIF_ARG_4;
+    if (is_small(jail_id))
+        so.jail = unsigned_val(jail_id);
+    else
+        BIF_ERROR(BIF_P, BADARG);
+    so.flags = erts_default_spo_flags;
+    pid = erl_create_process(BIF_P, BIF_ARG_1, BIF_ARG_2, BIF_ARG_3, &so);
+    if (is_non_value(pid)) {
+	BIF_ERROR(BIF_P, so.error_code);
+    } else {
+	if (ERTS_USE_MODIFIED_TIMING()) {
+	    BIF_TRAP2(erts_delay_trap, BIF_P, pid, ERTS_MODIFIED_TIMING_DELAY);
+	}
+	BIF_RET(pid);
+    }
+}
+
 BIF_RETTYPE spawn_3(BIF_ALIST_3)
 {
     ErlSpawnOpts so;
     Eterm pid;
 
+    so.jail = INHERIT_JAIL;
     so.flags = erts_default_spo_flags;
     pid = erl_create_process(BIF_P, BIF_ARG_1, BIF_ARG_2, BIF_ARG_3, &so);
     if (is_non_value(pid)) {
@@ -969,6 +992,7 @@ BIF_RETTYPE spawn_link_3(BIF_ALIST_3)
     ErlSpawnOpts so;
     Eterm pid;
 
+    so.jail = INHERIT_JAIL;
     so.flags = erts_default_spo_flags|SPO_LINK;
     pid = erl_create_process(BIF_P, BIF_ARG_1, BIF_ARG_2, BIF_ARG_3, &so);
     if (is_non_value(pid)) {
@@ -1014,6 +1038,7 @@ BIF_RETTYPE spawn_opt_1(BIF_ALIST_1)
     so.priority       = PRIORITY_NORMAL;
     so.max_gen_gcs    = (Uint16) erts_smp_atomic32_read_nob(&erts_max_gen_gcs);
     so.scheduler      = 0;
+    so.jail           = INHERIT_JAIL;
 
     /*
      * Walk through the option list.

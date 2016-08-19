@@ -434,6 +434,7 @@ erl_first_process_otp(char* modname, void* code, unsigned size, int argc, char**
     args = CONS(hp, env, args);
 
     so.flags = erts_default_spo_flags|SPO_SYSTEM_PROC;
+    so.jail = NO_JAIL;
     res = erl_create_process(&parent, start_mod, am_start, args, &so);
     erts_smp_proc_unlock(&parent, ERTS_PROC_LOCK_MAIN);
     erts_cleanup_empty_process(&parent);
@@ -457,6 +458,7 @@ erl_system_process_otp(Eterm parent_pid, char* modname)
     parent = erts_pid2proc(NULL, 0, parent_pid, ERTS_PROC_LOCK_MAIN);
 
     so.flags = erts_default_spo_flags|SPO_SYSTEM_PROC;
+    so.jail = NO_JAIL;
     res = erl_create_process(parent, start_mod, am_start, NIL, &so);
     erts_smp_proc_unlock(parent, ERTS_PROC_LOCK_MAIN);
     return res;

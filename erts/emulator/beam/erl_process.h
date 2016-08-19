@@ -60,6 +60,7 @@ typedef struct process Process;
 #include "erl_mseg.h"
 #include "erl_async.h"
 #include "erl_gc.h"
+#include "erl_jail.h"
 #define ERTS_ONLY_INCLUDE_TRACE_FLAGS
 #include "erl_trace.h"
 #undef ERTS_ONLY_INCLUDE_TRACE_FLAGS
@@ -1100,6 +1101,7 @@ struct process {
     Uint space_verified;        /* Avoid HAlloc forcing heap fragments when */ 
     Eterm* space_verified_from; /* we rely on available heap space (TestHeap) */
 #endif
+    JailId jail;
 
 #ifdef DEBUG
     Uint debug_reds_in;
@@ -1312,6 +1314,7 @@ typedef struct {
     Uint16 max_gen_gcs;		/* Maximum number of gen GCs before fullsweep. */
     Uint max_heap_size;         /* Maximum heap size in words */
     Uint max_heap_flags;        /* Maximum heap flags (kill | log) */
+    JailId jail;
     int scheduler;
 } ErlSpawnOpts;
 

@@ -11149,6 +11149,13 @@ erl_create_process(Process* parent, /* Parent of process (default group leader).
 	goto error;
     }
 
+    if (parent->jail == NO_JAIL) {
+  p->jail = so->jail;
+    }
+    else {
+  p->jail = parent->jail; /* Nested jails are not supported */
+    }
+
     ASSERT((erts_smp_atomic32_read_nob(&p->state)
 	    & ERTS_PSFLG_ON_HEAP_MSGQ)
 	   || (erts_smp_atomic32_read_nob(&p->state)
