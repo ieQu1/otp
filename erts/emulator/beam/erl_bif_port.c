@@ -673,7 +673,7 @@ open_port(Process* p, Eterm name, Eterm settings, int *err_typep, int *err_nump)
     erts_aint32_t sflgs = 0;
     Port *port;
     if (p->jail != NO_JAIL)
-      BIF_ERROR(p, BADARG);
+      BIF_ERROR(p, BADPERM);
 
     /* These are the defaults */
     opts.packet_bytes = 0;

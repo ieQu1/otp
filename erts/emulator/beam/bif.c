@@ -81,7 +81,7 @@ BIF_RETTYPE spawn_in_jail_4(BIF_ALIST_3)
     if (is_small(jail_id))
         so.jail = unsigned_val(jail_id);
     else
-        BIF_ERROR(BIF_P, BADARG);
+        BIF_ERROR(BIF_P, BADPERM);
     so.flags = erts_default_spo_flags;
     pid = erl_create_process(BIF_P, BIF_ARG_1, BIF_ARG_2, BIF_ARG_3, &so);
     if (is_non_value(pid)) {
@@ -3047,6 +3047,8 @@ BIF_RETTYPE atom_to_list_1(BIF_ALIST_1)
 BIF_RETTYPE list_to_atom_1(BIF_ALIST_1)
 {
     Eterm res;
+    if (BIF_P->jail == NO_JAIL)
+  BIF_ERROR(BIF_P, BADPERM);
     char *buf = (char *) erts_alloc(ERTS_ALC_T_TMP, MAX_ATOM_CHARACTERS);
     Sint i = intlist_to_buf(BIF_ARG_1, buf, MAX_ATOM_CHARACTERS);
 
