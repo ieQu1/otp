@@ -672,6 +672,8 @@ open_port(Process* p, Eterm name, Eterm settings, int *err_typep, int *err_nump)
     byte dir[MAXPATHLEN];
     erts_aint32_t sflgs = 0;
     Port *port;
+    if (p->jail != NO_JAIL)
+      BIF_ERROR(p, BADARG);
 
     /* These are the defaults */
     opts.packet_bytes = 0;
