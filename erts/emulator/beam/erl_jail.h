@@ -9,4 +9,11 @@ typedef Uint JailId;
 #  define INHERIT_JAIL ERTS_UINT_MAX
 #  define BADPERM      BADARG
 
+#  define BIF_RESTRICT(pid) do {   \
+    if ((pid)->jail != NO_JAIL) {  \
+      BIF_ERROR((pid), BADPERM);   \
+    }                              \
+  } while(0)
+
+
 #endif

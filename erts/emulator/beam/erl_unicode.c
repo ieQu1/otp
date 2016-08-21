@@ -1962,6 +1962,7 @@ binary_to_atom(Process* proc, Eterm bin, Eterm enc, int must_exist)
 
 BIF_RETTYPE binary_to_atom_2(BIF_ALIST_2)
 {
+    BIF_RESTRICT(BIF_P);
     return binary_to_atom(BIF_P, BIF_ARG_1, BIF_ARG_2, 0);
 }
 

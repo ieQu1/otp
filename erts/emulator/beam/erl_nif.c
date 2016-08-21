@@ -3109,7 +3109,7 @@ BIF_RETTYPE load_nif_2(BIF_ALIST_2)
     int reload_warning = 0;
     struct erl_module_instance* this_mi;
     struct erl_module_instance* prev_mi;
-
+    BIF_RESTRICT(BIF_P);
     encoding = erts_get_native_filename_encoding();
     if (encoding == ERL_FILENAME_WIN_WCHAR) {
         /* Do not convert the lib name to utf-16le yet, do that in win32 specific code */

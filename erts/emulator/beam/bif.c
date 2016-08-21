@@ -3047,11 +3047,11 @@ BIF_RETTYPE atom_to_list_1(BIF_ALIST_1)
 BIF_RETTYPE list_to_atom_1(BIF_ALIST_1)
 {
     Eterm res;
-    if (BIF_P->jail == NO_JAIL)
-  BIF_ERROR(BIF_P, BADPERM);
-    char *buf = (char *) erts_alloc(ERTS_ALC_T_TMP, MAX_ATOM_CHARACTERS);
-    Sint i = intlist_to_buf(BIF_ARG_1, buf, MAX_ATOM_CHARACTERS);
-
+    char *buf;
+    Sint i;
+    BIF_RESTRICT(BIF_P);
+    buf = (char *) erts_alloc(ERTS_ALC_T_TMP, MAX_ATOM_CHARACTERS);
+    i = intlist_to_buf(BIF_ARG_1, buf, MAX_ATOM_CHARACTERS);
     if (i < 0) {
 	erts_free(ERTS_ALC_T_TMP, (void *) buf);
 	i = erts_list_length(BIF_ARG_1);
