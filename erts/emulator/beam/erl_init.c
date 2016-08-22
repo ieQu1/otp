@@ -49,6 +49,7 @@
 #include "erl_bif_unique.h"
 #define ERTS_WANT_TIMER_WHEEL_API
 #include "erl_time.h"
+#include "erl_jail.h"
 
 #ifdef HIPE
 #include "hipe_mode_switch.h"	/* for hipe_mode_switch_init() */
@@ -395,6 +396,7 @@ erl_init(int ncpu,
     packet_parser_init();
     erl_nif_init();
     erts_msacc_init();
+    erl_jails_init();
 }
 
 static Eterm
