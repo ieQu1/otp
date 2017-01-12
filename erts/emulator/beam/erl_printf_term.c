@@ -408,7 +408,8 @@ print_term(fmtfn_t fn, void* arg, Eterm obj, long *dcount) {
 	    break;
 	case PORT_DEF:
 	case EXTERNAL_PORT_DEF:
-	    PRINT_STRING(res, fn, arg, "#Port<");
+	    PRINT_STRING(res, fn,
+                   arg, "#Port<");
 	    PRINT_UWORD(res, fn, arg, 'u', 0, 1,
 			(ErlPfUWord) port_channel_no(wobj));
 	    PRINT_CHAR(res, fn, arg, '.');

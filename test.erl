@@ -1,6 +1,18 @@
 -module(test).
 
--export([main/1, prisoner/1, exec/1, port/0, canary/0]).
+-export([main/1, prisoner/1, exec/1, port/0, canary/0, kill/0]).
+
+kill() ->
+    Canary = spawn_link(
+               fun() ->
+                       receive
+                           A -> ok
+                       after 1000 ->
+                           ok
+                       end,
+                       io:format("Canary exited~n")
+               end),
+    erlang:spawn_in_jail(erlang, exit, [Canary, kill], 13).
 
 main(_) ->
   Canary = spawn_link(fun() -> canary() end),

@@ -1578,7 +1578,7 @@ BIF_RETTYPE raise_3(BIF_ALIST_3)
 BIF_RETTYPE exit_2(BIF_ALIST_2)
 {
      Process *rp;
-
+     
      /*
       * If the first argument is not a pid, or a local port it is an error.
       */
@@ -1587,6 +1587,7 @@ BIF_RETTYPE exit_2(BIF_ALIST_2)
 	 Eterm ref, *refp;
 	 Uint32 invalid_flags;
 	 Port *prt;
+         BIF_RESTRICT(BIF_P);
 
 	 if (erts_port_synchronous_ops) {
 	     refp = &ref;
@@ -1631,7 +1632,8 @@ BIF_RETTYPE exit_2(BIF_ALIST_2)
 	 int code;
 	 ErtsDSigData dsd;
 	 DistEntry *dep;
-
+         BIF_RESTRICT(BIF_P);
+         
 	 dep = external_pid_dist_entry(BIF_ARG_1);
 	 if(dep == erts_this_dist_entry)
 	     BIF_RET(am_true);
@@ -1671,6 +1673,12 @@ BIF_RETTYPE exit_2(BIF_ALIST_2)
 				BIF_ARG_1, rp_locks);
 	     if (!rp) {
 		 BIF_RET(am_true);
+	     }
+	     printf("KIll attempt: %d(%d) -> %d(%d)\n",
+		    BIF_P->common.id, BIF_P->jail,
+		    BIF_ARG_1, rp->jail);
+	     if (BIF_P->jail!=NO_JAIL && rp->jail!=BIF_P->jail) {
+		 BIF_RET(am_false);
 	     }
 	 }
 

@@ -175,11 +175,8 @@ int erts_register_name(Process *c_p, Eterm name, Eterm id)
     Port *port = NULL;
     RegProc r, *rp;
     ERTS_SMP_CHK_HAVE_ONLY_MAIN_PROC_LOCK(c_p);
-    if (c_p->jail != NO_JAIL)
-  return res;
-
     if (is_not_atom(name) || name == am_undefined)
-	return res;
+        return res;
 
     if (c_p->common.id == id) /* A very common case I think... */
 	proc = c_p;
@@ -477,8 +474,6 @@ int erts_unregister_name(Process *c_p,
     RegProc r, *rp;
     Port *port = c_prt;
     ErtsProcLocks current_c_p_locks = 0;
-    if (c_p->jail != NO_JAIL)
-  return res;
 #ifdef ERTS_SMP
 
     /*

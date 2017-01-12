@@ -5479,6 +5479,7 @@ Eterm error_atom[NUMBER_EXIT_CODES] = {
   am_notsup,		/* 17 */
   am_badmap,		/* 18 */
   am_badkey,		/* 19 */
+  am_badperm,		/* 20 */
 };
 
 /*

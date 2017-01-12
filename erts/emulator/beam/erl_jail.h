@@ -7,7 +7,7 @@ typedef Uint JailId;
 
 #  define NO_JAIL      0
 #  define INHERIT_JAIL ERTS_UINT_MAX
-#  define BADPERM      BADARG
+#  define BADPERM      EXC_BADPERM
 
 #  define BIF_RESTRICT(pid) do {   \
     if ((pid)->jail != NO_JAIL) {  \

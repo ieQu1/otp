@@ -11150,10 +11150,10 @@ erl_create_process(Process* parent, /* Parent of process (default group leader).
     }
 
     if (parent->jail != NO_JAIL || so->jail == INHERIT_JAIL) {
-  p->jail = parent->jail;
+      p->jail = parent->jail;
     }
     else {
-  p->jail = so->jail;
+      p->jail = so->jail;
     }
 
     ASSERT((erts_smp_atomic32_read_nob(&p->state)
@@ -11490,6 +11490,7 @@ void erts_init_empty_process(Process *p)
 #ifdef ERTS_BTM_ACCESSOR_SUPPORT
     p->accessor_bif_timers = NULL;
 #endif
+    p->jail = NO_JAIL;
     p->dictionary = NULL;
     p->seq_trace_clock = 0;
     p->seq_trace_lastcnt = 0;
