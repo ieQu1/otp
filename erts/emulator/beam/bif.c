@@ -1587,8 +1587,6 @@ BIF_RETTYPE exit_2(BIF_ALIST_2)
 	 Eterm ref, *refp;
 	 Uint32 invalid_flags;
 	 Port *prt;
-         BIF_RESTRICT(BIF_P);
-
 	 if (erts_port_synchronous_ops) {
 	     refp = &ref;
 	     invalid_flags = ERTS_PORT_SFLGS_INVALID_DRIVER_LOOKUP;
@@ -1673,12 +1671,6 @@ BIF_RETTYPE exit_2(BIF_ALIST_2)
 				BIF_ARG_1, rp_locks);
 	     if (!rp) {
 		 BIF_RET(am_true);
-	     }
-	     printf("KIll attempt: %d(%d) -> %d(%d)\n",
-		    BIF_P->common.id, BIF_P->jail,
-		    BIF_ARG_1, rp->jail);
-	     if (BIF_P->jail!=NO_JAIL && rp->jail!=BIF_P->jail) {
-		 BIF_RET(am_false);
 	     }
 	 }
 
@@ -3057,7 +3049,6 @@ BIF_RETTYPE list_to_atom_1(BIF_ALIST_1)
     Eterm res;
     char *buf;
     Sint i;
-    BIF_RESTRICT(BIF_P);
     buf = (char *) erts_alloc(ERTS_ALC_T_TMP, MAX_ATOM_CHARACTERS);
     i = intlist_to_buf(BIF_ARG_1, buf, MAX_ATOM_CHARACTERS);
     if (i < 0) {

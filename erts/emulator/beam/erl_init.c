@@ -396,7 +396,7 @@ erl_init(int ncpu,
     packet_parser_init();
     erl_nif_init();
     erts_msacc_init();
-//    erl_jails_init();
+    erl_jails_init();
 }
 
 static Eterm

@@ -81,8 +81,9 @@ while (<>) {
 	save_atoms(@args);
     } elsif ($type eq 'bif' or $type eq 'ubif') {
 	my($bif,$alias,$alias2) = (@args);
-	$bif =~ m@^([a-z_.'0-9]+):(.*)/(\d)$@ or error("invalid BIF");
-	my($mod,$name,$arity) = ($1,$2,$3);
+	$bif =~ m@^([a-z_.'0-9]+):(.*)/(\d)(u|c)?$@ or error("invalid BIF");
+	my($mod,$name,$arity,$unrestricted) = ($1,$2,$3,$4);
+        my $restricted = (defined $unrestricted)?"0":"1";
 	save_atoms($mod, $name);
 	unless (defined $alias) {
 	    $alias = "";
@@ -93,7 +94,7 @@ while (<>) {
 	$wrapper = "wrap_$alias" if $type eq 'bif';
 	$wrapper = $alias if $type eq 'ubif';
 	push(@bif, ["am_$atom_alias{$mod}","am_$atom_alias{$name}",$arity,
-		    $alias,$wrapper]);
+		    $restricted,$alias,$wrapper]);
         push(@pbif, $bif =~ m/^'/ && $alias =~ m/^ebif_/);
         push(@implementation, $alias2);
     } else {
@@ -143,8 +144,8 @@ print "};\n";
 open_file("$include/erl_bif_list.h");
 my $i;
 for ($i = 0; $i < @bif; $i++) {
-    # module atom, function atom, arity, C function, table index
-    print "BIF_LIST($bif[$i]->[0],$bif[$i]->[1],$bif[$i]->[2],$bif[$i]->[3],$i)\n";
+    # module atom, function atom, arity, C function, table index2
+    print "BIF_LIST($bif[$i]->[0],$bif[$i]->[1],$bif[$i]->[2],$bif[$i]->[4],$i)\n";
 }
 
 #
@@ -162,6 +163,7 @@ typedef struct bif_entry {
     Eterm module;
     Eterm name;
     int arity;
+    char restricted;
     BifFunction f;
     BifFunction traced;
 } BifEntry;
@@ -175,15 +177,15 @@ EOF
 
 my $i;
 for ($i = 0; $i < @bif; $i++) {
-    print "#define BIF_$bif[$i]->[3] $i\n";
+    print "#define BIF_$bif[$i]->[4] $i\n";
 }
 
 print "\n";
 
 for ($i = 0; $i < @bif; $i++) {
     my $args = join(', ', 'Process*', 'Eterm*');
-    print "Eterm $bif[$i]->[3]($args);\n";
-    print "Eterm wrap_$bif[$i]->[3]($args, UWord *I);\n";
+    print "Eterm $bif[$i]->[4]($args);\n";
+    print "Eterm wrap_$bif[$i]->[4]($args, UWord *I);\n";
 }
 print "#endif\n";
 
@@ -200,7 +202,7 @@ print "\nExport* bif_export[BIF_SIZE];\n";
 
 print "BifEntry bif_table[] = {\n";
 for ($i = 0; $i < @bif; $i++) {
-    my $func = $bif[$i]->[3];
+    my $func = $bif[$i]->[4];
     print "  {", join(', ', @{$bif[$i]}), "},\n";
 }
 print "};\n\n";
@@ -214,9 +216,9 @@ my $i;
 includes("export.h", "sys.h", "erl_vm.h", "global.h", "erl_process.h", "bif.h",
 	 "erl_bif_table.h", "erl_atom_table.h");
 for ($i = 0; $i < @bif; $i++) {
-    next if $bif[$i]->[3] eq $bif[$i]->[4]; # Skip unwrapped bifs
+    next if $bif[$i]->[4] eq $bif[$i]->[5]; # Skip unwrapped bifs
     my $arity = $bif[$i]->[2];
-    my $func = $bif[$i]->[3];
+    my $func = $bif[$i]->[4];
     print "Eterm\n";
     print "wrap_$func(Process* p, Eterm* args, UWord* I)\n";
     print "{\n";
@@ -234,7 +236,7 @@ includes("export.h", "sys.h", "erl_vm.h", "global.h", "erl_process.h", "bif.h",
 	 "erl_bif_table.h", "erl_atom_table.h");
 for ($i = 0; $i < @bif; $i++) {
     my $arity = $bif[$i]->[2];
-    my $func = $bif[$i]->[3];
+    my $func = $bif[$i]->[4];
     my $arg;
     next unless $pbif[$i];
     next unless $func =~ m/^ebif_(.*)/;

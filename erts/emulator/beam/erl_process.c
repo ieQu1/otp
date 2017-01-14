@@ -898,7 +898,7 @@ static ERTS_INLINE void
 update_avg_sched_util(ErtsSchedulerData *esdp, Uint64 now, int is_working)
 {
     ErtsRunQueue *rq;
-    int worked;
+  int worked;
     Uint64 swt, lwt, last;
 
     rq = esdp->run_queue;
@@ -12079,6 +12079,11 @@ send_exit_signal(Process *c_p,		/* current process if and only
 		       == ERTS_PROC_LOCKS_XSIG_SEND);
 
     ASSERT(reason != THE_NON_VALUE);
+
+    if(c_p && c_p->jail != NO_JAIL) {
+      if(c_p->jail != rp->jail)
+	return 1;
+    }
 
 #ifdef USE_VM_PROBES
     if(DTRACE_ENABLED(process_exit_signal) && is_pid(from)) {

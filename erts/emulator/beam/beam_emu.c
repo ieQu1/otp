@@ -3571,7 +3571,13 @@ do {						\
 
 	    DTRACE_NIF_RETURN(c_p, (Eterm)I[-3], (Eterm)I[-2], (Uint)I[-1]);
 	    goto apply_bif_or_nif_epilogue;
-	 
+            
+	OpCase(apply_restricted_bif):
+            if(c_p->jail != NO_JAIL) {
+              c_p->current = I-3;
+              c_p->freason = BADPERM;
+              c_p->r
+            }
 	OpCase(apply_bif):
 	    /*
 	     * At this point, I points to the code[3] in the export entry for
@@ -5115,7 +5121,8 @@ do {						\
 			      bif_table[i].name,
 			      bif_table[i].arity);
 	 bif_export[i] = ep;
-	 ep->code[3] = (BeamInstr) OpCode(apply_bif);
+	 ep->code[3] = (bif_table[i].restricted)?(BeamInstr) OpCode(apply_restricted_bif)
+                                                :(BeamInstr) OpCode(apply_bif);
 	 ep->code[4] = (BeamInstr) bif_table[i].f;
 	 /* XXX: set func info for bifs */
 	 ep->fake_op_func_info_for_hipe[0] = (BeamInstr) BeamOp(op_i_func_info_IaaI);

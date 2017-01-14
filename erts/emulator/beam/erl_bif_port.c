@@ -163,7 +163,6 @@ BIF_RETTYPE erts_internal_port_command_3(BIF_ALIST_3)
     Port *prt;
     int flags = 0;
     Eterm ref;
-
     if (is_not_nil(BIF_ARG_3)) {
 	Eterm l = BIF_ARG_3;
 	while (is_list(l)) {
@@ -672,7 +671,6 @@ open_port(Process* p, Eterm name, Eterm settings, int *err_typep, int *err_nump)
     byte dir[MAXPATHLEN];
     erts_aint32_t sflgs = 0;
     Port *port;
-    BIF_RESTRICT(p);
     /* These are the defaults */
     opts.packet_bytes = 0;
     opts.use_stdio = 1;
