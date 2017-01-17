@@ -810,7 +810,7 @@ erts_finish_loading(Binary* magic, Process* c_p,
 		continue;
 	    }
 	    if (ep->addressv[code_ix] == ep->code+3) {
-		if (ep->code[3] == (BeamInstr) em_apply_bif) {
+              if (IS_BIF(ep->code[3])) {
 		    continue;
 		} else if (ep->code[3] ==
 			   (BeamInstr) BeamOp(op_i_generic_breakpoint)) {
@@ -1410,7 +1410,7 @@ load_import_table(LoaderState* stp)
 	 * the BIF function.
 	 */
 	if ((e = erts_active_export_entry(mod, func, arity)) != NULL) {
-	    if (e->code[3] == (BeamInstr) em_apply_bif) {
+            if (IS_BIF(e->code[3])) {
 		stp->import[i].bf = (BifFunction) e->code[4];
 		if (func == am_load_nif && mod == am_erlang && arity == 2) {
 		    stp->may_load_nif = 1;
@@ -1504,7 +1504,8 @@ is_bif(Eterm mod, Eterm func, unsigned arity)
     if (e == NULL) {
 	return 0;
     }
-    if (e->code[3] != (BeamInstr) em_apply_bif) {
+    if (e->code[3] != (BeamInstr) em_apply_bif &&
+        e->code[3] != (BeamInstr) em_apply_restricted_bif) {
 	return 0;
     }
     if (mod == am_erlang && func == am_apply && arity == 3) {

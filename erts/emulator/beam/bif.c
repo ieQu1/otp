@@ -4977,7 +4977,7 @@ void erts_init_trap_export(Export* ep, Eterm m, Eterm f, Uint a,
     ep->code[0] = m;
     ep->code[1] = f;
     ep->code[2] = a;
-    ep->code[3] = (BeamInstr) em_apply_bif;
+    ep->code[3] = (BeamInstr) em_apply_bif; // JAILTODO Check this
     ep->code[4] = (BeamInstr) bif;
 }
 

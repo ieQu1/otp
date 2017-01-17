@@ -693,7 +693,7 @@ BIF_RETTYPE finish_after_on_load_2(BIF_ALIST_2)
 		ep->code[4] = 0;
 	    } else {
 		if (ep->addressv[code_ix] == ep->code+3 &&
-		    ep->code[3] == (BeamInstr) em_apply_bif) {
+		    IS_BIF(ep->code[3])) {
 		    continue;
 		}
 		ep->addressv[code_ix] = ep->code+3;
@@ -715,7 +715,7 @@ BIF_RETTYPE finish_after_on_load_2(BIF_ALIST_2)
 	    if (ep == NULL || ep->code[0] != BIF_ARG_1) {
 		continue;
 	    }
-	    if (ep->code[3] == (BeamInstr) em_apply_bif) {
+	    if (IS_BIF(ep->code[3])) {
 		continue;
 	    }
 	    ep->code[4] = 0;
@@ -1355,7 +1355,7 @@ delete_code(Module* modp)
 	Export *ep = export_list(i, code_ix);
         if (ep != NULL && (ep->code[0] == module)) {
 	    if (ep->addressv[code_ix] == ep->code+3) {
-		if (ep->code[3] == (BeamInstr) em_apply_bif) {
+              if (IS_BIF(ep->code[3])) {
 		    continue;
 		}
 		else if (ep->code[3] ==

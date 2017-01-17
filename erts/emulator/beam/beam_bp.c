@@ -228,7 +228,7 @@ erts_bp_match_export(BpFunctions* f, Eterm mfa[3], int specified)
 	}
 	pc = ep->code+3;
 	if (ep->addressv[code_ix] == pc) {
-	    if ((*pc == (BeamInstr) em_apply_bif ||
+            if ((IS_BIF(*pc) ||
 		 *pc == (BeamInstr) em_call_error_handler)) {
 		continue;
 	    }

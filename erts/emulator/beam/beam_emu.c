@@ -213,6 +213,7 @@ BeamInstr beam_continue_exit[1];
 
 BeamInstr* em_call_error_handler;
 BeamInstr* em_apply_bif;
+BeamInstr* em_apply_restricted_bif;
 BeamInstr* em_call_nif;
 
 
@@ -3574,9 +3575,10 @@ do {						\
             
 	OpCase(apply_restricted_bif):
             if(c_p->jail != NO_JAIL) {
-              c_p->current = I-3;
+              printf("Restricted ur BIF, check\n");
               c_p->freason = BADPERM;
-              c_p->r
+              c_p->fcalls = FCALLS - 1;
+              goto lb_Cl_error;
             }
 	OpCase(apply_bif):
 	    /*
@@ -5102,6 +5104,7 @@ do {						\
      
      em_call_error_handler = OpCode(call_error_handler);
      em_apply_bif = OpCode(apply_bif);
+     em_apply_restricted_bif = OpCode(apply_restricted_bif);
      em_call_nif = OpCode(call_nif);
 
      beam_apply[0]             = (BeamInstr) OpCode(i_apply);

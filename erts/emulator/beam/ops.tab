@@ -583,7 +583,6 @@ put_list s s d
 normal_exit
 continue_exit
 apply_bif
-apply_restricted_bif
 call_nif
 call_error_handler
 error_action_code
@@ -1663,3 +1662,6 @@ recv_mark f
 recv_set Fail | label Lbl | loop_rec Lf Reg => \
    i_recv_set | label Lbl | loop_rec Lf Reg
 i_recv_set
+
+# Jail
+apply_restricted_bif
