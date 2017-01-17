@@ -3575,10 +3575,12 @@ do {						\
             
 	OpCase(apply_restricted_bif):
             if(c_p->jail != NO_JAIL) {
-              printf("Restricted ur BIF, check\n");
+              erts_fprintf(stderr, "Restricted your BIF, check %T(%d)\n",
+                           c_p->common.id, c_p->jail);
               c_p->freason = BADPERM;
-              c_p->fcalls = FCALLS - 1;
-              goto lb_Cl_error;
+              c_p->fvalue = am_undefined;
+              I = handle_error(c_p, c_p->cp, reg, vbf);
+              goto post_error_handling;
             }
 	OpCase(apply_bif):
 	    /*
@@ -3606,7 +3608,6 @@ do {						\
 					 * (check_process_code/2).
 					 */
 	    DTRACE_BIF_ENTRY(c_p, (Eterm)I[-3], (Eterm)I[-2], (Uint)I[-1]);
-
 	    SWAPOUT;
 	    ERTS_DBG_CHK_REDS(c_p, FCALLS - 1);
 	    c_p->fcalls = FCALLS - 1;

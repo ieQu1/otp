@@ -1,7 +1,10 @@
 -module(test).
 
 -export([main/0, prisoner/1, exec/1, port/0, kill/1, link_kill/1, 
-         link_run/1, fatality/1, send_local_msg/1, port/1]).
+         link_run/1, fatality/1, send_local_msg/1, port/1, print/1]).
+
+print(Jail) ->
+    spawn_test(Jail, io, format, ["HAXXX!!!~n"]).
 
 main() ->
     [F(true)||F<-[ fun fatality/1 
@@ -17,6 +20,7 @@ spawn_test(false, M, F, A) ->
 
 port(Jailed) ->
     File = "./HAXXXXED!!!11",
+    file:delete(File),
     spawn_test(Jailed, os, cmd, ["touch " ++ File]),
     receive after 1000 -> ok
     end,

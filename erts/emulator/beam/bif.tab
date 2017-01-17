@@ -38,37 +38,37 @@
 # call them from within a guard).
 #
 
-ubif erlang:abs/1
-bif erlang:adler32/1
-bif erlang:adler32/2
-bif erlang:adler32_combine/3
-bif erlang:apply/3
-bif erlang:atom_to_list/1
-bif erlang:binary_to_list/1
-bif erlang:binary_to_list/3
+ubif erlang:abs/1u
+bif erlang:adler32/1u
+bif erlang:adler32/2u
+bif erlang:adler32_combine/3u
+bif erlang:apply/3u
+bif erlang:atom_to_list/1u
+bif erlang:binary_to_list/1u
+bif erlang:binary_to_list/3u
 bif erlang:binary_to_term/1
-bif erlang:crc32/1
-bif erlang:crc32/2
-bif erlang:crc32_combine/3
-bif erlang:date/0
+bif erlang:crc32/1u
+bif erlang:crc32/2u
+bif erlang:crc32_combine/3u
+bif erlang:date/0u
 bif erlang:delete_module/1
 bif erlang:display/1
 bif erlang:display_string/1
 bif erlang:display_nl/0
-ubif erlang:element/2
+ubif erlang:element/2u
 bif erlang:erase/0
 bif erlang:erase/1
-bif erlang:exit/1
-bif erlang:exit/2
+bif erlang:exit/1c
+bif erlang:exit/2c
 bif erlang:external_size/1
 bif erlang:external_size/2
 ubif erlang:float/1
-bif erlang:float_to_list/1
-bif erlang:float_to_list/2
-bif erlang:fun_info/2
+bif erlang:float_to_list/1u
+bif erlang:float_to_list/2u
+bif erlang:fun_info/2u
 bif erlang:garbage_collect/0
-bif erlang:get/0
-bif erlang:get/1
+bif erlang:get/0u
+bif erlang:get/1u
 bif erlang:get_keys/1
 bif erlang:group_leader/0
 bif erlang:group_leader/2
@@ -77,26 +77,26 @@ bif erlang:phash/2
 bif erlang:phash2/1
 bif erlang:phash2/2
 ubif erlang:hd/1
-bif erlang:integer_to_list/1
+bif erlang:integer_to_list/1u
 bif erlang:is_alive/0
-ubif erlang:length/1
-bif erlang:link/1
+ubif erlang:length/1u
+bif erlang:link/1u
 bif erlang:list_to_atom/1
-bif erlang:list_to_binary/1
-bif erlang:list_to_float/1
-bif erlang:list_to_integer/1
-bif erlang:list_to_pid/1
-bif erlang:list_to_tuple/1
+bif erlang:list_to_binary/1u
+bif erlang:list_to_float/1u
+bif erlang:list_to_integer/1u
+bif erlang:list_to_pid/1u
+bif erlang:list_to_tuple/1u
 bif erlang:loaded/0
-bif erlang:localtime/0
-bif erlang:localtime_to_universaltime/2
-bif erlang:make_ref/0
-bif erlang:unique_integer/0
-bif erlang:unique_integer/1
-bif erlang:md5/1
-bif erlang:md5_init/0
-bif erlang:md5_update/2
-bif erlang:md5_final/1
+bif erlang:localtime/0u
+bif erlang:localtime_to_universaltime/2u
+bif erlang:make_ref/0u
+bif erlang:unique_integer/0u
+bif erlang:unique_integer/1u
+bif erlang:md5/1u
+bif erlang:md5_init/0u
+bif erlang:md5_update/2u
+bif erlang:md5_final/1u
 bif erlang:module_loaded/1
 bif erlang:function_exported/3
 bif erlang:monitor_node/2
@@ -104,49 +104,49 @@ bif erlang:monitor_node/3
 ubif erlang:node/1
 ubif erlang:node/0
 bif erlang:nodes/1
-bif erlang:now/0
-bif erlang:monotonic_time/0
-bif erlang:monotonic_time/1
-bif erlang:system_time/0
-bif erlang:system_time/1
+bif erlang:now/0u
+bif erlang:monotonic_time/0u
+bif erlang:monotonic_time/1u
+bif erlang:system_time/0u
+bif erlang:system_time/1u
 bif erlang:time_offset/0
 bif erlang:time_offset/1
-bif erlang:timestamp/0
+bif erlang:timestamp/0u
 
 bif erts_internal:open_port/2
 
-bif erlang:pid_to_list/1
+bif erlang:pid_to_list/1u
 bif erlang:ports/0
 bif erlang:pre_loaded/0
-bif erlang:process_flag/2
-bif erlang:process_flag/3
-bif erlang:process_info/1
-bif erlang:process_info/2
+bif erlang:process_flag/2c
+bif erlang:process_flag/3c
+bif erlang:process_info/1c
+bif erlang:process_info/2c
 bif erlang:processes/0
-bif erlang:put/2
+bif erlang:put/2u
 bif erlang:register/2
 bif erlang:registered/0
 ubif erlang:round/1
-ubif erlang:self/0
+ubif erlang:self/0u
 bif erlang:setelement/3
-ubif erlang:size/1
-bif erlang:spawn/3
+ubif erlang:size/1u
+bif erlang:spawn/3u
 bif erlang:spawn_in_jail/4
-bif erlang:spawn_link/3
-bif erlang:split_binary/2
+bif erlang:spawn_link/3u
+bif erlang:split_binary/2u
 bif erlang:statistics/1
-bif erlang:term_to_binary/1
-bif erlang:term_to_binary/2
-bif erlang:throw/1
-bif erlang:time/0
+bif erlang:term_to_binary/1u
+bif erlang:term_to_binary/2u
+bif erlang:throw/1u
+bif erlang:time/0u
 ubif erlang:tl/1
 ubif erlang:trunc/1
 bif erlang:tuple_to_list/1
-bif erlang:universaltime/0
-bif erlang:universaltime_to_localtime/1
-bif erlang:unlink/1
+bif erlang:universaltime/0u
+bif erlang:universaltime_to_localtime/1u
+bif erlang:unlink/1u
 bif erlang:unregister/1
-bif erlang:whereis/1
+bif erlang:whereis/1u
 bif erlang:spawn_opt/1
 bif erlang:setnode/2
 bif erlang:setnode/3
@@ -194,40 +194,40 @@ bif erlang:process_display/2
 
 bif erlang:bump_reductions/1
 
-bif math:cos/1
-bif math:cosh/1
-bif math:sin/1
-bif math:sinh/1
-bif math:tan/1
-bif math:tanh/1
-bif math:acos/1
-bif math:acosh/1
-bif math:asin/1
-bif math:asinh/1
-bif math:atan/1
-bif math:atanh/1
-bif math:erf/1
-bif math:erfc/1
-bif math:exp/1
-bif math:log/1
-bif math:log2/1
-bif math:log10/1
-bif math:sqrt/1
-bif math:atan2/2
-bif math:pow/2
+bif math:cos/1u
+bif math:cosh/1u
+bif math:sin/1u
+bif math:sinh/1u
+bif math:tan/1u
+bif math:tanh/1u
+bif math:acos/1u
+bif math:acosh/1u
+bif math:asin/1u
+bif math:asinh/1u
+bif math:atan/1u
+bif math:atanh/1u
+bif math:erf/1u
+bif math:erfc/1u
+bif math:exp/1u
+bif math:log/1u
+bif math:log2/1u
+bif math:log10/1u
+bif math:sqrt/1u
+bif math:atan2/2u
+bif math:pow/2u
 
-bif erlang:start_timer/3
-bif erlang:start_timer/4
-bif erlang:send_after/3
-bif erlang:send_after/4
-bif erlang:cancel_timer/1
-bif erlang:cancel_timer/2
-bif erlang:read_timer/1
-bif erlang:read_timer/2
+bif erlang:start_timer/3u
+bif erlang:start_timer/4u
+bif erlang:send_after/3u
+bif erlang:send_after/4u
+bif erlang:cancel_timer/1u
+bif erlang:cancel_timer/2u
+bif erlang:read_timer/1u
+bif erlang:read_timer/2u
 
-bif erlang:make_tuple/2
-bif erlang:append_element/2
-bif erlang:make_tuple/3
+bif erlang:make_tuple/2u
+bif erlang:append_element/2u
+bif erlang:make_tuple/3u
 
 bif erlang:system_flag/2
 bif erlang:system_info/1
@@ -241,80 +241,80 @@ bif erlang:system_profile/2
 # Added 2007-01-17
 bif erlang:system_profile/0
 # End Added 2007-01-17
-bif erlang:ref_to_list/1
-bif erlang:port_to_list/1
-bif erlang:fun_to_list/1
+bif erlang:ref_to_list/1u
+bif erlang:port_to_list/1u
+bif erlang:fun_to_list/1u
 
-bif erlang:monitor/2
-bif erlang:demonitor/1
-bif erlang:demonitor/2
+bif erlang:monitor/2u
+bif erlang:demonitor/1u
+bif erlang:demonitor/2u
 
-bif erlang:is_process_alive/1
+bif erlang:is_process_alive/1u
 
-bif erlang:error/1		error_1
+bif erlang:error/1u		error_1
 bif erlang:error/2		error_2
 bif erlang:raise/3		raise_3
-bif erlang:get_stacktrace/0
+bif erlang:get_stacktrace/0u
 
 bif erlang:is_builtin/3
 
-ubif erlang:'and'/2
-ubif erlang:'or'/2
-ubif erlang:'xor'/2
-ubif erlang:'not'/1
+ubif erlang:'and'/2u
+ubif erlang:'or'/2u
+ubif erlang:'xor'/2u
+ubif erlang:'not'/1u
 
-ubif erlang:'>'/2			sgt_2
-ubif erlang:'>='/2			sge_2
-ubif erlang:'<'/2			slt_2
-ubif erlang:'=<'/2			sle_2
-ubif erlang:'=:='/2			seq_2
-ubif erlang:'=='/2			seqeq_2
-ubif erlang:'=/='/2			sneq_2
-ubif erlang:'/='/2			sneqeq_2
-ubif erlang:'+'/2			splus_2
-ubif erlang:'-'/2			sminus_2
-ubif erlang:'*'/2			stimes_2
-ubif erlang:'/'/2			div_2
-ubif erlang:'div'/2			intdiv_2
-ubif erlang:'rem'/2
-ubif erlang:'bor'/2
-ubif erlang:'band'/2
-ubif erlang:'bxor'/2
-ubif erlang:'bsl'/2
-ubif erlang:'bsr'/2
-ubif erlang:'bnot'/1
-ubif erlang:'-'/1			sminus_1
-ubif erlang:'+'/1			splus_1
+ubif erlang:'>'/2u			sgt_2
+ubif erlang:'>='/2u			sge_2
+ubif erlang:'<'/2u			slt_2
+ubif erlang:'=<'/2u			sle_2
+ubif erlang:'=:='/2u			seq_2
+ubif erlang:'=='/2u			seqeq_2
+ubif erlang:'=/='/2u			sneq_2
+ubif erlang:'/='/2u			sneqeq_2
+ubif erlang:'+'/2u			splus_2
+ubif erlang:'-'/2u			sminus_2
+ubif erlang:'*'/2u			stimes_2
+ubif erlang:'/'/2u			div_2
+ubif erlang:'div'/2u			intdiv_2
+ubif erlang:'rem'/2u
+ubif erlang:'bor'/2u
+ubif erlang:'band'/2u
+ubif erlang:'bxor'/2u
+ubif erlang:'bsl'/2u
+ubif erlang:'bsr'/2u
+ubif erlang:'bnot'/1u
+ubif erlang:'-'/1u			sminus_1
+ubif erlang:'+'/1u			splus_1
 
 # New operators in R8. These were the only operators missing.
 # erlang:send/2, erlang:append/2 and erlang:subtract/2 are now also
 # defined in erlang.erl, and the C names can be removed when all
 # internal references have been updated to the new ebif_... entries.
 
-bif erlang:'!'/2		ebif_bang_2
-bif erlang:send/2
-bif erlang:send/3
-bif erlang:'++'/2		ebif_plusplus_2
-bif erlang:append/2
-bif erlang:'--'/2		ebif_minusminus_2
-bif erlang:subtract/2
+bif erlang:'!'/2u		ebif_bang_2
+bif erlang:send/2u
+bif erlang:send/3u
+bif erlang:'++'/2u		ebif_plusplus_2
+bif erlang:append/2u
+bif erlang:'--'/2u		ebif_minusminus_2
+bif erlang:subtract/2u
 
-ubif erlang:is_atom/1
-ubif erlang:is_list/1
-ubif erlang:is_tuple/1
-ubif erlang:is_float/1
-ubif erlang:is_integer/1
-ubif erlang:is_number/1
-ubif erlang:is_pid/1
-ubif erlang:is_port/1
-ubif erlang:is_reference/1
-ubif erlang:is_binary/1
-ubif erlang:is_function/1
-ubif erlang:is_function/2
-ubif erlang:is_record/2
-ubif erlang:is_record/3
+ubif erlang:is_atom/1u
+ubif erlang:is_list/1u
+ubif erlang:is_tuple/1u
+ubif erlang:is_float/1u
+ubif erlang:is_integer/1u
+ubif erlang:is_number/1u
+ubif erlang:is_pid/1u
+ubif erlang:is_port/1u
+ubif erlang:is_reference/1u
+ubif erlang:is_binary/1u
+ubif erlang:is_function/1u
+ubif erlang:is_function/2u
+ubif erlang:is_record/2u
+ubif erlang:is_record/3u
 
-bif erlang:match_spec_test/3
+bif erlang:match_spec_test/3u
 
 #
 # Bifs in ets module.
@@ -396,11 +396,11 @@ bif re:run/3
 # Bifs in lists module.
 #
 
-bif lists:member/2
-bif lists:reverse/2
-bif lists:keymember/3
-bif lists:keysearch/3
-bif lists:keyfind/3
+bif lists:member/2u
+bif lists:reverse/2u
+bif lists:keymember/3u
+bif lists:keysearch/3u
+bif lists:keyfind/3u
 
 #
 # Bifs for debugging.
@@ -460,12 +460,12 @@ bif erlang:list_to_existing_atom/1
 #
 # New Bifs in R12B-0
 #
-ubif erlang:is_bitstring/1
-ubif erlang:tuple_size/1
-ubif erlang:byte_size/1
-ubif erlang:bit_size/1
-bif erlang:list_to_bitstring/1
-bif erlang:bitstring_to_list/1
+ubif erlang:is_bitstring/1u
+ubif erlang:tuple_size/1u
+ubif erlang:byte_size/1u
+ubif erlang:bit_size/1u
+bif erlang:list_to_bitstring/1u
+bif erlang:bitstring_to_list/1u
 
 #
 # New Bifs in R12B-2
@@ -480,15 +480,15 @@ bif erlang:decode_packet/3
 #
 # New Bifs in R12B-5
 #
-bif unicode:characters_to_binary/2
-bif unicode:characters_to_list/2
-bif unicode:bin_is_7bit/1
+bif unicode:characters_to_binary/2u
+bif unicode:characters_to_list/2u
+bif unicode:bin_is_7bit/1u
 #
 # New Bifs in R13A.
 #
-bif erlang:atom_to_binary/2
+bif erlang:atom_to_binary/2u
 bif erlang:binary_to_atom/2
-bif erlang:binary_to_existing_atom/2
+bif erlang:binary_to_existing_atom/2u
 bif net_kernel:dflag_unicode_io/1
 #
 # New Bifs in R13B-1
@@ -515,32 +515,32 @@ bif erlang:binary_to_term/2
 #
 # The searching/splitting/substituting thingies
 #
-ubif erlang:binary_part/2
-ubif erlang:binary_part/3
+ubif erlang:binary_part/2u
+ubif erlang:binary_part/3u
 
 bif binary:compile_pattern/1
-bif binary:match/2
-bif binary:match/3
-bif binary:matches/2
-bif binary:matches/3
-bif binary:longest_common_prefix/1
-bif binary:longest_common_suffix/1
-bif binary:first/1
-bif binary:last/1
-bif binary:at/2
-bif binary:part/2 binary_binary_part_2
-bif binary:part/3 binary_binary_part_3
-bif binary:bin_to_list/1
-bif binary:bin_to_list/2
-bif binary:bin_to_list/3
-bif binary:list_to_bin/1
-bif binary:copy/1
-bif binary:copy/2
-bif binary:referenced_byte_size/1
-bif binary:encode_unsigned/1
-bif binary:encode_unsigned/2
-bif binary:decode_unsigned/1
-bif binary:decode_unsigned/2
+bif binary:match/2u
+bif binary:match/3u
+bif binary:matches/2u
+bif binary:matches/3u
+bif binary:longest_common_prefix/1u
+bif binary:longest_common_suffix/1u
+bif binary:first/1u
+bif binary:last/1u
+bif binary:at/2u
+bif binary:part/2u binary_binary_part_2
+bif binary:part/3u binary_binary_part_3
+bif binary:bin_to_list/1u
+bif binary:bin_to_list/2u
+bif binary:bin_to_list/3u
+bif binary:list_to_bin/1u
+bif binary:copy/1u
+bif binary:copy/2u
+bif binary:referenced_byte_size/1u
+bif binary:encode_unsigned/1u
+bif binary:encode_unsigned/2u
+bif binary:decode_unsigned/1u
+bif binary:decode_unsigned/2u
 
 bif erlang:nif_error/1
 bif erlang:nif_error/2
@@ -563,8 +563,8 @@ bif erlang:check_old_code/1
 #
 # New in R15B
 #
-bif erlang:universaltime_to_posixtime/1
-bif erlang:posixtime_to_universaltime/1
+bif erlang:universaltime_to_posixtime/1u
+bif erlang:posixtime_to_universaltime/1u
 
 #
 # New in R15B01
@@ -590,13 +590,13 @@ bif erlang:prepare_loading/2
 bif erlang:finish_loading/1
 bif erlang:insert_element/3
 bif erlang:delete_element/2
-bif erlang:binary_to_integer/1
-bif erlang:binary_to_integer/2
-bif erlang:integer_to_binary/1
-bif erlang:list_to_integer/2
-bif erlang:float_to_binary/1
-bif erlang:float_to_binary/2
-bif erlang:binary_to_float/1
+bif erlang:binary_to_integer/1u
+bif erlang:binary_to_integer/2u
+bif erlang:integer_to_binary/1u
+bif erlang:list_to_integer/2u
+bif erlang:float_to_binary/1u
+bif erlang:float_to_binary/2u
+bif erlang:binary_to_float/1u
 
 bif io:printable_range/0
 bif os:unsetenv/1
@@ -607,22 +607,22 @@ bif os:unsetenv/1
 
 bif re:inspect/2
 
-ubif erlang:is_map/1
-ubif erlang:map_size/1
-bif maps:to_list/1
-bif maps:find/2
-bif maps:get/2
-bif maps:from_list/1
-bif maps:is_key/2
-bif maps:keys/1
-bif maps:merge/2
-bif maps:new/0
-bif maps:put/3
-bif maps:remove/2
-bif maps:update/3
-bif maps:values/1
+ubif erlang:is_map/1u
+ubif erlang:map_size/1u
+bif maps:to_list/1u
+bif maps:find/2u
+bif maps:get/2u
+bif maps:from_list/1u
+bif maps:is_key/2u
+bif maps:keys/1u
+bif maps:merge/2u
+bif maps:new/0u
+bif maps:put/3u
+bif maps:remove/2u
+bif maps:update/3u
+bif maps:values/1u
 
-bif erts_internal:cmp_term/2
+bif erts_internal:cmp_term/2u
 
 bif ets:take/2
 
@@ -635,7 +635,7 @@ bif erlang:fun_info_mfa/1
 # New in 18.0
 #
 
-bif erlang:get_keys/0
+bif erlang:get_keys/0u
 bif ets:update_counter/4
 bif erts_debug:map_info/1
 
@@ -645,16 +645,16 @@ bif erts_debug:map_info/1
 
 bif erts_internal:copy_literals/2
 bif erts_internal:purge_module/1
-bif binary:split/2
-bif binary:split/3
+bif binary:split/2u
+bif binary:split/3u
 bif erts_debug:size_shared/1
 bif erts_debug:copy_shared/1
 bif erlang:has_prepared_code_on_load/1
 
-bif maps:take/2
+bif maps:take/2u
 
 #
 # Obsolete
 #
 
-bif erlang:hash/2
+bif erlang:hash/2u

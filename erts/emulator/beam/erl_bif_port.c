@@ -57,7 +57,7 @@ BIF_RETTYPE erts_internal_open_port_2(BIF_ALIST_2)
     Eterm res;
     char *str;
     int err_type, err_num;
-
+    BIF_RESTRICT(BIF_P); // JAILTODO: Why doesn't it work without it?
     port = open_port(BIF_P, BIF_ARG_1, BIF_ARG_2, &err_type, &err_num);
     if (!port) {
 	if (err_type == -3) {
@@ -671,6 +671,8 @@ open_port(Process* p, Eterm name, Eterm settings, int *err_typep, int *err_nump)
     byte dir[MAXPATHLEN];
     erts_aint32_t sflgs = 0;
     Port *port;
+    /* erts_fprintf(stderr, "open_port %T(%d)[%016lx]\n", */
+    /*              p->common.id, p->jail, p); */
     /* These are the defaults */
     opts.packet_bytes = 0;
     opts.use_stdio = 1;
