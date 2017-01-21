@@ -3575,11 +3575,11 @@ do {						\
             
 	OpCase(apply_restricted_bif):
             if(c_p->jail != NO_JAIL) {
-              erts_fprintf(stderr, "Restricted your BIF, check %T(%d)\n",
-                           c_p->common.id, c_p->jail);
+              /* erts_fprintf(stderr, "Restricted your BIF, check %T(%d)\n", */
+              /*              c_p->common.id, c_p->jail); */
               c_p->freason = BADPERM;
               c_p->fvalue = am_undefined;
-              I = handle_error(c_p, c_p->cp, reg, vbf);
+              I = handle_error(c_p, c_p->cp, reg, vbf); // JAILTODO: Check stacktrace
               goto post_error_handling;
             }
 	OpCase(apply_bif):

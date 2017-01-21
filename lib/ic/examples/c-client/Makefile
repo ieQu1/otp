@@ -19,7 +19,7 @@
 #
 #
 # Point this at your version of OTP
-OTPROOT=/usr/local/otp/daily_build/otp_beam_sunos5_r8a.latest
+OTPROOT=/Users/df/Documents/erlang-promotion/otp/
 
 # Type actual IC Version
 ICVSN=4.1.1
@@ -37,11 +37,11 @@ CCL=client
 GCCLS=oe_code_seed rmod_random
 
 # Includes
-IFLAGS=-I$(OTPROOT)/lib/ic-$(ICVSN)/include \
-       -I$(OTPROOT)/lib/erl_interface-$(EIVSN)/include
+IFLAGS=-I$(OTPROOT)/lib/ic/include \
+       -I$(OTPROOT)/lib/erl_interface/include
 
-LDFLAGS=-L$(OTPROOT)/lib/ic-$(ICVSN)/priv/lib \
-	-L$(OTPROOT)/lib/erl_interface-$(EIVSN)/lib
+LDFLAGS=-L$(OTPROOT)/lib/ic/priv/lib \
+	-L$(OTPROOT)/lib/erl_interface/lib
 
 LDLIBS=-lic -lerl_interface -lei -lnsl -lsocket
 

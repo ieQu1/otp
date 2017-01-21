@@ -186,11 +186,17 @@ BIF_RETTYPE link_1(BIF_ALIST_1)
     /* check that the pid or port which is our argument is OK */
 
     if (is_internal_pid(BIF_ARG_1)) {
-	if (insert_internal_link(BIF_P, BIF_ARG_1)) {
-	    BIF_RET(am_true);
-	}
-	else {
-	    goto res_no_proc;
+	ErtsProcLocks rp_locks = ERTS_PROC_LOCKS_XSIG_SEND;
+	Process *rp = erts_pid2proc(BIF_P, ERTS_PROC_LOCK_MAIN,
+				    BIF_ARG_1, rp_locks);
+	if (BIF_P->jail == NO_JAIL || BIF_P->jail == rp->jail ||
+	     BIF_P->parent != rp->common.id) {
+	     if (insert_internal_link(BIF_P, BIF_ARG_1)) {
+		  BIF_RET(am_true);
+	     }
+	     else {
+		  goto res_no_proc;
+	     }
 	}
     }
 
@@ -200,7 +206,7 @@ BIF_RETTYPE link_1(BIF_ALIST_1)
 				     (erts_port_synchronous_ops
 				      ? ERTS_PORT_SFLGS_INVALID_DRIVER_LOOKUP
 				      : ERTS_PORT_SFLGS_INVALID_LOOKUP));
-	if (!prt) {
+	if (!prt || BIF_P->jail != NO_JAIL) {
 	    goto res_no_proc;
 	}
 
@@ -237,7 +243,9 @@ BIF_RETTYPE link_1(BIF_ALIST_1)
     }
 
     if (is_external_pid(BIF_ARG_1)) {
-
+	if(BIF_P->jail != NO_JAIL) {
+	     goto res_no_proc;
+	}
 	erts_smp_proc_lock(BIF_P, ERTS_PROC_LOCK_LINK);
 
 	/* We may earn time by checking first that we're not linked already */

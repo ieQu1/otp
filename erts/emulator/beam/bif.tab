@@ -80,7 +80,7 @@ ubif erlang:hd/1
 bif erlang:integer_to_list/1u
 bif erlang:is_alive/0
 ubif erlang:length/1u
-bif erlang:link/1u
+bif erlang:link/1c
 bif erlang:list_to_atom/1
 bif erlang:list_to_binary/1u
 bif erlang:list_to_float/1u
