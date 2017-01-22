@@ -121,6 +121,7 @@ static int insert_internal_link(Process* p, Eterm rpid)
 {
     Process *rp;
     ErtsProcLocks rp_locks = ERTS_PROC_LOCK_LINK;
+    char permitted;
 
     ASSERT(is_internal_pid(rpid));
 
@@ -137,10 +138,17 @@ static int insert_internal_link(Process* p, Eterm rpid)
     rp = erts_pid2proc_opt(p, ERTS_PROC_LOCK_MAIN|ERTS_PROC_LOCK_LINK,
 			   rpid, rp_locks,
 			   ERTS_P2P_FLG_ALLOW_OTHER_X);
-
+    permitted = p->jail == NO_JAIL || p->jail == rp->jail ||
+                p->parent == rp->common.id;
     if (!rp) {
 	erts_smp_proc_unlock(p, ERTS_PROC_LOCK_LINK);
 	return 0;
+    }
+
+    if (!permitted) {
+	erts_smp_proc_unlock(p, ERTS_PROC_LOCK_LINK);
+        erts_smp_proc_unlock(rp, rp_locks); // JAILTODO: Ugly
+	return 0;         
     }
 
     if (p != rp) {
@@ -186,18 +194,12 @@ BIF_RETTYPE link_1(BIF_ALIST_1)
     /* check that the pid or port which is our argument is OK */
 
     if (is_internal_pid(BIF_ARG_1)) {
-	ErtsProcLocks rp_locks = ERTS_PROC_LOCKS_XSIG_SEND;
-	Process *rp = erts_pid2proc(BIF_P, ERTS_PROC_LOCK_MAIN,
-				    BIF_ARG_1, rp_locks);
-	if (BIF_P->jail == NO_JAIL || BIF_P->jail == rp->jail ||
-	     BIF_P->parent != rp->common.id) {
-	     if (insert_internal_link(BIF_P, BIF_ARG_1)) {
-		  BIF_RET(am_true);
-	     }
-	     else {
-		  goto res_no_proc;
-	     }
-	}
+         if (insert_internal_link(BIF_P, BIF_ARG_1)) {
+              BIF_RET(am_true);
+         }
+         else {
+              goto res_no_proc;
+         }
     }
 
     if (is_internal_port(BIF_ARG_1)) {
