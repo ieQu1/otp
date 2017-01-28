@@ -15,6 +15,15 @@ typedef Uint JailId;
     }                              \
   } while(0)
 
+// JAILTODO: Not effective
+#  define JAIL_PARENT(pid, target) \
+     erts_cmp_compound((pid)->group_leader, (target)->common.id, 1, 0)
+
+#  define JAIL_VALID_RECEIVER(pid, target)			\
+     ((pid)->jail == NO_JAIL ||					\
+      (pid)->jail == (target)->jail ||				\
+      JAIL_PARENT(pid, target))
+
 #define MAX_JAILS 1024
 
 typedef struct {
@@ -22,16 +31,16 @@ typedef struct {
     Uint64 total_reds;
     Uint64 max_reds;
     Uint64 total_heap;
-    Uint64 max_heap;  
-} jail;
+    Uint64 max_heap;
+} Jail;
 
 void
 erl_jails_init(void);
 
 void
-erl_lock_jailtab(Uint idx);
+erl_lock_jailtab(JailId jail);
 
 void
-erl_unlock_jailtab(Uint idx);
+erl_unlock_jailtab(JailId jail);
 
 #endif

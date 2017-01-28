@@ -1,7 +1,30 @@
 -module(test).
 
 -export([main/0, prisoner/1, exec/1, port/0, kill/1, link_kill/1, 
-         link_run/1, fatality/1, send_local_msg/1, port/1, print/1]).
+         link_run/1, fatality/1, send_local_msg/1, port/1, print/1,
+	 test_leadership/0, test_leadership_x/1]).
+
+dump_mailbox(Timeout) ->
+    receive
+	A -> io:format("~p got msg: ~p~n", [self(), A]),
+	     dump_mailbox(Timeout)
+    after 1000 ->
+	ok
+    end.
+
+test_leadership_x(Parent) ->
+    Parent ! {my_groupleader_is, group_leader()}
+%    ,io:format("echo haxxxxx")
+    .
+    
+test_leadership() ->
+    spawn(
+      fun() ->
+	      process_flag(trap_exit, true),
+	      erlang:spawn_in_jail(test, test_leadership_x, [self()], 42),
+	      dump_mailbox(1000),
+	      io:format("My group leader is ~p~n", [group_leader()])
+      end).
 
 print(Jail) ->
     spawn_test(Jail, io, format, ["HAXXX!!!~n"]).

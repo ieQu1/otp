@@ -11150,10 +11150,10 @@ erl_create_process(Process* parent, /* Parent of process (default group leader).
     }
 
     if (parent->jail != NO_JAIL || so->jail == INHERIT_JAIL) {
-      p->jail = parent->jail;
+	 p->jail = parent->jail;
     }
     else {
-      p->jail = so->jail;
+	 p->jail = so->jail;
     }
 
     ASSERT((erts_smp_atomic32_read_nob(&p->state)
@@ -11265,7 +11265,12 @@ erl_create_process(Process* parent, /* Parent of process (default group leader).
 
     ASSERT(is_pid(parent->group_leader));
 
-    if (parent->group_leader == ERTS_INVALID_PID)
+    if (so->jail != INHERIT_JAIL && p->jail != NO_JAIL)
+	 /* When called from spawn_in_jail */{
+        p->group_leader = parent->common.id;
+	erts_printf("spawned jailed one %T with group_leader: %T\n", p->common.id, p->group_leader);
+    }
+    else if (parent->group_leader == ERTS_INVALID_PID)
 	p->group_leader = p->common.id;
     else {
 	/* Needs to be done after the heap has been set up */
@@ -12080,9 +12085,8 @@ send_exit_signal(Process *c_p,		/* current process if and only
 
     ASSERT(reason != THE_NON_VALUE);
 
-    if(c_p && c_p->jail != NO_JAIL) {
-      if(c_p->jail != rp->jail)
-	return 1;
+    if(c_p && c_p->jail != NO_JAIL && c_p->jail != rp->jail) {
+	 return 1;
     }
 
 #ifdef USE_VM_PROBES

@@ -1315,6 +1315,7 @@ typedef struct {
     Uint max_heap_size;         /* Maximum heap size in words */
     Uint max_heap_flags;        /* Maximum heap flags (kill | log) */
     JailId jail;
+    Eterm group_leader;
     int scheduler;
 } ErlSpawnOpts;
 

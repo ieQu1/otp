@@ -4,8 +4,9 @@
 #include "sys.h"
 #include "erl_jail.h"
 #include "global.h"
-#include "erl_process.h"
 #include "error.h"
+
+static Jail jails[MAX_JAILS];
 
 static erts_mtx_t jailtab_lck;
 

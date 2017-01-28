@@ -87,10 +87,10 @@ BIF_RETTYPE spawn_in_jail_4(BIF_ALIST_3)
     if (is_non_value(pid)) {
 	BIF_ERROR(BIF_P, so.error_code);
     } else {
-	if (ERTS_USE_MODIFIED_TIMING()) {
-	    BIF_TRAP2(erts_delay_trap, BIF_P, pid, ERTS_MODIFIED_TIMING_DELAY);
-	}
-	BIF_RET(pid);
+	 if (ERTS_USE_MODIFIED_TIMING()) {
+	      BIF_TRAP2(erts_delay_trap, BIF_P, pid, ERTS_MODIFIED_TIMING_DELAY);
+	 }
+	 BIF_RET(pid);
     }
 }
 
@@ -121,7 +121,6 @@ static int insert_internal_link(Process* p, Eterm rpid)
 {
     Process *rp;
     ErtsProcLocks rp_locks = ERTS_PROC_LOCK_LINK;
-    char permitted;
 
     ASSERT(is_internal_pid(rpid));
 
@@ -138,14 +137,12 @@ static int insert_internal_link(Process* p, Eterm rpid)
     rp = erts_pid2proc_opt(p, ERTS_PROC_LOCK_MAIN|ERTS_PROC_LOCK_LINK,
 			   rpid, rp_locks,
 			   ERTS_P2P_FLG_ALLOW_OTHER_X);
-    permitted = p->jail == NO_JAIL || p->jail == rp->jail ||
-                p->parent == rp->common.id;
     if (!rp) {
 	erts_smp_proc_unlock(p, ERTS_PROC_LOCK_LINK);
 	return 0;
     }
 
-    if (!permitted) {
+    if (!JAIL_VALID_RECEIVER(p, rp)) {
 	erts_smp_proc_unlock(p, ERTS_PROC_LOCK_LINK);
         erts_smp_proc_unlock(rp, rp_locks); // JAILTODO: Ugly
 	return 0;         

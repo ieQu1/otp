@@ -708,19 +708,16 @@ erts_send_message(Process* sender,
     }
 #endif
 
-    /* if(sender && sender->jail != NO_JAIL) { */
-    /*     erts_fprintf(stderr, "%T(%T, %d) --> %T(%d)\n", */
-    /*                  sender->common.id, sender->parent, */
-    /*                  sender->jail, */
-    /*                  receiver->common.id, */
-    /*                  receiver->jail); */
-    /* } */
-    if (sender && receiver && sender->jail != NO_JAIL && (sender->parent != receiver->common.id
-                                                          || sender->jail != receiver->jail))
-    {
-	 erts_fprintf(stderr, "Parent: %T vs. %T\n", sender->parent, receiver->common.id);
-	 return res;        
+    if(sender && sender->jail != NO_JAIL) {
+        erts_fprintf(stderr, "%T(%T, %d) --> %T(%d) : %T\n",
+                     sender->common.id, sender->group_leader,
+                     sender->jail,
+                     receiver->common.id,
+                     receiver->jail,
+		     message);
     }
+    if (sender && receiver && !JAIL_VALID_RECEIVER(sender, receiver))
+	 return res;
 
     receiver_state = erts_smp_atomic32_read_nob(&receiver->state);
 
