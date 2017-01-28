@@ -2245,7 +2245,8 @@ setelement(_Index, _Tuple1, _Value) ->
               | {fullsweep_after, Number :: non_neg_integer()}
               | {min_heap_size, Size :: non_neg_integer()}
               | {max_heap_size, Size :: max_heap_size()}
-              | {min_bin_vheap_size, VSize :: non_neg_integer()}.
+              | {min_bin_vheap_size, VSize :: non_neg_integer()}
+	      | {jail, Jail :: non_neg_integer()}.
 spawn_opt(_Tuple) ->
    erlang:nif_error(undefined).
 

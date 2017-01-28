@@ -6,7 +6,7 @@
 
 dump_mailbox(Timeout) ->
     receive
-	A -> io:format("~p got msg: ~p~n", [self(), A]),
+	A -> io:format("DD ~p got msg: ~p~n", [self(), A]),
 	     dump_mailbox(Timeout)
     after 1000 ->
 	ok
@@ -15,15 +15,16 @@ dump_mailbox(Timeout) ->
 test_leadership_x(Parent) ->
     Parent ! {my_groupleader_is, group_leader()}
 %    ,io:format("echo haxxxxx")
+    ,throw("I ded")
     .
     
 test_leadership() ->
     spawn(
       fun() ->
 	      process_flag(trap_exit, true),
-	      erlang:spawn_in_jail(test, test_leadership_x, [self()], 42),
+	      erlang:spawn_opt({test, test_leadership_x, [self()], [{jail, 42}]}),
 	      dump_mailbox(1000),
-	      io:format("My group leader is ~p~n", [group_leader()])
+	      io:format("TT: My group leader is ~p~n", [group_leader()])
       end).
 
 print(Jail) ->
@@ -37,7 +38,7 @@ main() ->
                  ]].
 
 spawn_test(true, M, F, A) ->
-    erlang:spawn_in_jail(M, F, A, 42);
+    erlang:spawn_opt({M, F, A, [{jail, 42}]});
 spawn_test(false, M, F, A) ->
     erlang:spawn(M, F, A).
 
@@ -60,6 +61,7 @@ fatality(Jailed) ->
     spawn_test(Jailed, erlang, exit, [Pid, kill]).
 
 link_kill(Jail) ->
+    Parent = self(),
     Canary = spawn_link(
                fun() ->
                        receive
@@ -67,13 +69,20 @@ link_kill(Jail) ->
                        after 1000 ->
                            ok
                        end,
-                       io:format("OK: Canary survived~n")
+                       io:format("OK: Canary survived~n"),
+		       Parent ! done
                end),
-    spawn_test(Jail, test, link_run, [Canary]).
-        
+    spawn_test(Jail, test, link_run, [Canary]),
+    receive
+	done ->
+	    io:format("Link_kill ok.")
+    after 1500 ->
+	    io:format("Link_kill failed.")
+    end.
+
 link_run(Pid) ->
     link(Pid),
-    throw(test_test).
+    throw(link_kill_failed).
 
 kill(Jail) ->
     Canary = spawn_link(
@@ -86,7 +95,7 @@ kill(Jail) ->
                        io:format("OK: Canary survived~n")
                end),
     if Jail ->
-            erlang:spawn_in_jail(erlang, exit, [Canary, kill], 13);
+            erlang:spawn_opt({erlang, exit, [Canary, kill], [{jail, 13}]});
        true ->
             erlang:spawn(erlang, exit, [Canary, kill])
     end.
@@ -105,7 +114,7 @@ send_local_msg(true) ->
                      end
              end),
   MyPid = self(),
-  Jailed = erlang:spawn_in_jail(test, prisoner, [[Canary, MyPid]], 42),
+  Jailed = erlang:spawn_opt({test, prisoner, [[Canary, MyPid]], [{jail, 42}]}),
   listener(Canary, Jailed).
 
 listener(CanaryPid, JailedPid) ->
@@ -133,4 +142,4 @@ prisoner(L) ->
     L).
 
 port() ->
-  erlang:spawn_in_jail(test, exec, [fun() -> os:cmd("touch HACKED!!!!!") end], 42).
+  erlang:spawn_jail({test, exec, [fun() -> os:cmd("touch HACKED!!!!!") end], [{jail, 42}]}).

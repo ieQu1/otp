@@ -72,28 +72,6 @@ erts_smp_atomic_t erts_dead_ports_ptr; /* To store dying ports during snapshot *
  * each individual BIF does.
  */
 
-/* FIXME: Ugly copy-paste code */
-BIF_RETTYPE spawn_in_jail_4(BIF_ALIST_3)
-{
-    ErlSpawnOpts so;
-    Eterm pid;
-    Eterm jail_id = BIF_ARG_4;
-    if (is_small(jail_id))
-        so.jail = unsigned_val(jail_id);
-    else
-        BIF_ERROR(BIF_P, BADPERM);
-    so.flags = erts_default_spo_flags;
-    pid = erl_create_process(BIF_P, BIF_ARG_1, BIF_ARG_2, BIF_ARG_3, &so);
-    if (is_non_value(pid)) {
-	BIF_ERROR(BIF_P, so.error_code);
-    } else {
-	 if (ERTS_USE_MODIFIED_TIMING()) {
-	      BIF_TRAP2(erts_delay_trap, BIF_P, pid, ERTS_MODIFIED_TIMING_DELAY);
-	 }
-	 BIF_RET(pid);
-    }
-}
-
 BIF_RETTYPE spawn_3(BIF_ALIST_3)
 {
     ErlSpawnOpts so;
@@ -143,6 +121,7 @@ static int insert_internal_link(Process* p, Eterm rpid)
     }
 
     if (!JAIL_VALID_RECEIVER(p, rp)) {
+	erts_fprintf(stderr, "Invalid link receiver: %T, %T", p->common.id, rp->common.id);
 	erts_smp_proc_unlock(p, ERTS_PROC_LOCK_LINK);
         erts_smp_proc_unlock(rp, rp_locks); // JAILTODO: Ugly
 	return 0;         
@@ -1121,6 +1100,11 @@ BIF_RETTYPE spawn_opt_1(BIF_ALIST_1)
 		if (scheduler < 0 || erts_no_schedulers < scheduler)
 		    goto error;
 		so.scheduler = (int) scheduler;
+	    } else if (arg == am_jail && is_small(val)) {
+		 Uint jail = signed_val(val);
+		 if (jail < 0 || jail > MAX_JAILS)
+		    goto error;
+		 so.jail = jail; // This function is restricted, so it's ok to skip checks
 	    } else {
 		goto error;
 	    }

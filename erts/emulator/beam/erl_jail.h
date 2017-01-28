@@ -17,7 +17,7 @@ typedef Uint JailId;
 
 // JAILTODO: Not effective
 #  define JAIL_PARENT(pid, target) \
-     erts_cmp_compound((pid)->group_leader, (target)->common.id, 1, 0)
+     (erl_jail_parent((pid)->group_leader, (target)->common.id))
 
 #  define JAIL_VALID_RECEIVER(pid, target)			\
      ((pid)->jail == NO_JAIL ||					\
@@ -33,6 +33,9 @@ typedef struct {
     Uint64 total_heap;
     Uint64 max_heap;
 } Jail;
+
+int
+erl_jail_parent(Eterm pid, Eterm rcvr);
 
 void
 erl_jails_init(void);

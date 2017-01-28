@@ -131,7 +131,6 @@ ubif erlang:self/0u
 bif erlang:setelement/3
 ubif erlang:size/1u
 bif erlang:spawn/3u
-bif erlang:spawn_in_jail/4
 bif erlang:spawn_link/3u
 bif erlang:split_binary/2u
 bif erlang:statistics/1

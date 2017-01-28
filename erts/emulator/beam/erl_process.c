@@ -11265,10 +11265,10 @@ erl_create_process(Process* parent, /* Parent of process (default group leader).
 
     ASSERT(is_pid(parent->group_leader));
 
-    if (so->jail != INHERIT_JAIL && p->jail != NO_JAIL)
-	 /* When called from spawn_in_jail */{
+    if (so->jail != INHERIT_JAIL && p->jail != NO_JAIL) {
+	 /* When called from spawn_opt */
         p->group_leader = parent->common.id;
-	erts_printf("spawned jailed one %T with group_leader: %T\n", p->common.id, p->group_leader);
+	erts_fprintf(stderr, "spawned jailed one %T with group_leader: %T\n", p->common.id, p->group_leader);
     }
     else if (parent->group_leader == ERTS_INVALID_PID)
 	p->group_leader = p->common.id;
