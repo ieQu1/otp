@@ -21,10 +21,10 @@ test_leadership_x(Parent) ->
 test_leadership() ->
     spawn(
       fun() ->
-	      process_flag(trap_exit, true),
-	      erlang:spawn_opt({test, test_leadership_x, [self()], [{jail, 42}]}),
-	      dump_mailbox(1000),
-	      io:format("TT: My group leader is ~p~n", [group_leader()])
+		process_flag(trap_exit, true),
+		erlang:spawn_opt({test, test_leadership_x, [self()], [monitor, {jail, 42}]}),
+		dump_mailbox(1000),
+		io:format("TT: My group leader is ~p~n", [group_leader()])
       end).
 
 print(Jail) ->
