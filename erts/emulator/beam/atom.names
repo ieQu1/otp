@@ -332,6 +332,7 @@ atom invalid
 atom is_constant
 atom is_seq_trace
 atom io
+atom JAIL_EXIT='JAIL_EXIT'
 atom jail
 atom keypos
 atom kill

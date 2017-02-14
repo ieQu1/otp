@@ -5704,26 +5704,37 @@ terminate_proc(Process* c_p, Eterm Value)
     }
     /* EXF_LOG is a primary exception flag */
     if (c_p->freason & EXF_LOG) {
-	int alive = erts_is_alive;
-	erts_dsprintf_buf_t *dsbufp = erts_create_logger_dsbuf();
+	if (c_p->jail == NO_JAIL) {
+	    int alive = erts_is_alive;
+	    erts_dsprintf_buf_t *dsbufp = erts_create_logger_dsbuf();
 
-        /* Build the format message */
-	erts_dsprintf(dsbufp, "Error in process ~p ");
-	if (alive)
-	    erts_dsprintf(dsbufp, "on node ~p ");
-	erts_dsprintf(dsbufp, "with exit value:~n~p~n");
+	    /* Build the format message */
+	    erts_dsprintf(dsbufp, "Error in process ~p ");
+	    if (alive)
+		erts_dsprintf(dsbufp, "on node ~p ");
+	    erts_dsprintf(dsbufp, "with exit value:~n~p~n");
 
-        /* Build the args in reverse order */
-	hp = HAlloc(c_p, 2);
-	Args = CONS(hp, Value, Args);
-	if (alive) {
+	    /* Build the args in reverse order */
 	    hp = HAlloc(c_p, 2);
-	    Args = CONS(hp, erts_this_node->sysname, Args);
-	}
-	hp = HAlloc(c_p, 2);
-	Args = CONS(hp, c_p->common.id, Args);
+	    Args = CONS(hp, Value, Args);
+	    if (alive) {
+		hp = HAlloc(c_p, 2);
+		Args = CONS(hp, erts_this_node->sysname, Args);
+	    }
+	    hp = HAlloc(c_p, 2);
+	    Args = CONS(hp, c_p->common.id, Args);
 
-	erts_send_error_term_to_logger(c_p->group_leader, dsbufp, Args);
+	    erts_send_error_term_to_logger(c_p->group_leader, dsbufp, Args);
+	} else {
+	    // In case of jailed process send message to its group_leader
+	    // instead of the error_logger process
+	    ErtsProcLocks recv_locks = 0; // JAILTODO : check this
+	    Process *recv = NULL;
+	    recv = erts_proc_lookup_raw(c_p->group_leader);
+	    hp = HAlloc(c_p, 4);
+	    Args = TUPLE3(hp, am_JAIL_EXIT, Value, Args);
+	    erts_send_message(c_p, recv, &recv_locks, Args, 0);
+	}
     }
     /*
      * If we use a shared heap, the process will be garbage-collected.
