@@ -3,7 +3,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 #
-# Copyright Ericsson AB 1996-2025. All Rights Reserved.
+# Copyright Ericsson AB 1996-2026. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ include $(ERL_TOP)/make/target.mk
 ifeq ($(TYPE),debug)
 ERL_COMPILE_FLAGS += -Ddebug -W
 endif
- 
+
 include $(ERL_TOP)/make/$(TARGET)/otp.mk
 
 # ----------------------------------------------------
@@ -74,7 +74,9 @@ MODULES= \
 	mnesia_sup \
 	mnesia_sp  \
 	mnesia_text \
-	mnesia_tm
+	mnesia_tm \
+	mnesia_hook \
+	mnesia_net_kernel
 
 HRL_FILES= mnesia.hrl
 
@@ -132,7 +134,7 @@ $(APPUP_TARGET): $(APPUP_SRC) ../vsn.mk
 
 # ----------------------------------------------------
 # Release Target
-# ---------------------------------------------------- 
+# ----------------------------------------------------
 include $(ERL_TOP)/make/otp_release_targets.mk
 
 release_spec: opt
@@ -142,4 +144,3 @@ release_spec: opt
 	$(INSTALL_DATA) $(TARGET_FILES) "$(RELSYSDIR)/ebin"
 
 release_docs_spec:
-

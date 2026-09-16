@@ -3,7 +3,7 @@
 %%
 %% SPDX-License-Identifier: Apache-2.0
 %%
-%% Copyright Ericsson AB 1996-2025. All Rights Reserved.
+%% Copyright Ericsson AB 1996-2026. All Rights Reserved.
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -73,7 +73,7 @@
 	 db_prev_key/3,
 	 db_put/2,
 	 db_put/3,
-	 db_select/2,	 
+	 db_select/2,
 	 db_select/3,
 	 db_select_init/4,
 	 db_select_cont/3,
@@ -92,7 +92,7 @@
 	 dirty_rpc_error_tag/1,
 	 dist_coredump/0,
 	 disk_type/1,
-	 disk_type/2,	 
+	 disk_type/2,
 	 elems/2,
 	 ensure_loaded/1,
 	 error/2,
@@ -173,7 +173,7 @@
 	 eval_debug_fun/4,
 	 scratch_debug_fun/0
 	]).
- 
+
 
 search_delete(Obj, List) ->
     search_delete(Obj, List, [], none).
@@ -193,7 +193,7 @@ key_search_delete(Key, Pos, [H|T], Obj, Ack) ->
 key_search_delete(_, _, [], Obj, Ack) ->
     {Obj, Ack}.
 
-key_search_all(Key, Pos, TupleList) -> 
+key_search_all(Key, Pos, TupleList) ->
     key_search_all(Key, Pos, TupleList, []).
 key_search_all(Key, N, [H|T], Ack) when element(N, H) == Key ->
     key_search_all(Key, N, T, [H|Ack]);
@@ -209,7 +209,7 @@ elems(I, [H|T]) ->
 elems(_, []) ->
     [].
 
-%%  sort_commit see to that checkpoint info is always first in 
+%%  sort_commit see to that checkpoint info is always first in
 %%  commit_work structure the other info don't need to be sorted.
 sort_commit(List) ->
     sort_commit2(List, []).
@@ -219,7 +219,7 @@ sort_commit2([{checkpoints, ChkpL}| Rest], Acc) ->
 sort_commit2([H | R], Acc) ->
     sort_commit2(R, [H | Acc]);
 sort_commit2([], Acc) -> Acc.
-    
+
 is_string([H|T]) ->
     if
 	0 =< H, H < 256, is_integer(H)  -> is_string(T);
@@ -294,7 +294,7 @@ pad_name([], Len, Tail) when Len =< 0 ->
     Tail;
 pad_name([], Len, Tail) ->
     [$ | pad_name([], Len - 1, Tail)].
-    
+
 %% Some utility functions .....
 active_here(Tab) ->
     case val({Tab, where_to_read}) of
@@ -312,7 +312,7 @@ dir() -> mnesia_monitor:get_env(dir).
 dir(Fname) ->
     filename:join([dir(), to_list(Fname)]).
 
-tab2dat(Tab) ->  %% DETS files 
+tab2dat(Tab) ->  %% DETS files
     dir(lists:concat([Tab, ".DAT"])).
 
 tab2tmp(Tab) ->
@@ -506,14 +506,14 @@ lsort_add(Val,List) ->
 	true -> List;
 	false -> ordsets:add_element(Val,List)
     end.
-	    
+
 %% This function is needed due to the fact
 %% that the application_controller enters
 %% a deadlock now and then. ac is implemented
 %% as a rather naive server.
 ensure_loaded(Appl) ->
     case application_controller:get_loaded(Appl) of
-	{true, _} -> 
+	{true, _} ->
 	    ok;
 	false ->
 	    case application:load(Appl) of
@@ -564,12 +564,12 @@ set_remote_where_to_read(Tab) ->
 
 set_remote_where_to_read(Tab, Ignore) ->
     Active = val({Tab, active_replicas}),
-    Valid = 
+    Valid =
 	case mnesia_recover:get_master_nodes(Tab) of
 	    [] ->  Active;
 	    Masters -> mnesia_lib:intersect(Masters, Active)
-	end,    
-    Available = mnesia_lib:intersect(val({current, db_nodes}), Valid -- Ignore),    
+	end,
+    Available = mnesia_lib:intersect(val({current, db_nodes}), Valid -- Ignore),
     DiscOnlyC = val({Tab, disc_only_copies}),
     Preferred  = Available -- DiscOnlyC,
     if
@@ -645,7 +645,7 @@ overload_read(T) ->
         Flag when is_boolean(Flag) ->
             Flag
     end.
- 
+
 dist_coredump() ->
     dist_coredump(all_nodes()).
 dist_coredump(Ns) ->
@@ -673,10 +673,11 @@ core_file() ->
 	_ ->
 	    filename:absname(lists:concat(["MnesiaCore.", node()] ++ List))
     end.
-   
+
 mkcore(CrashInfo) ->
 %   dbg_out("Making a Mnesia core dump...~p~n", [CrashInfo]),
-    Nodes = [node() |nodes()],
+    NetKernel = mnesia_monitor:get_env(net_kernel_module),
+    Nodes = NetKernel:all_nodes(),
     %%TidLocks = (catch ets:tab2list(mnesia_tid_locks)),
     HeldLocks = ?CATCHU(mnesia:system_info(held_locks)),
     Core = [
@@ -704,7 +705,7 @@ mkcore(CrashInfo) ->
 	    {lock_queue, ?CATCHU(mnesia:system_info(lock_queue))},
 	    {load_info, ?CATCHU(mnesia_controller:get_info(2000))},
 	    {trans_info, ?CATCHU(mnesia_tm:get_info(2000))},
-	    	    
+
 	    {schema_file, ?CATCHU(file:read_file(tab2dat(schema)))},
 	    {dir_info, ?CATCHU(dir_info())},
 	    {logfile, ?CATCHU({ok, read_log_files()})}
@@ -784,11 +785,11 @@ workers({workers, Loaders, Senders, Dumper}) ->
 
 locking_procs(LockList) when is_list(LockList) ->
     Tids = [element(3, Lock) || Lock <- LockList],
-    UT = uniq(Tids),    
+    UT = uniq(Tids),
     Info = fun(Tid) ->
 		   Pid = Tid#tid.pid,
 		   case node(Pid) == node() of
-		       true -> 
+		       true ->
 			   {true, {Pid, proc_dbg_info(Pid)}};
 		       _ ->
 			   false
@@ -864,7 +865,7 @@ vcore(Bin) when is_binary(Bin) ->
 		  end
 	  end,
     lists:foreach(Fun, Core);
-    
+
 vcore(File) ->
     show("~n***** Mnesia core: ~tp *****~n", [File]),
     case file:read_file(File) of
@@ -982,7 +983,7 @@ report_fatal(Format, Args, Core) ->
 
 %% We sleep longer and longer the more we try
 %% Made some testing and came up with the following constants
-random_time(Retries, _Counter0) ->    
+random_time(Retries, _Counter0) ->
 %    UpperLimit = 2000,
 %    MaxIntv = trunc(UpperLimit * (1-(4/((Retries*Retries)+4)))),
     UpperLimit = 500,
@@ -1428,7 +1429,7 @@ deactivate_debug_fun(FunId, _File, _Line) ->
     ok.
 
 eval_debug_fun(FunId, EvalContext, EvalFile, EvalLine) ->
-    try 
+    try
 	case ?ets_lookup(?DEBUG_TAB, FunId) of
 	    [] ->
 		ok;
@@ -1454,11 +1455,9 @@ eval_debug_fun(FunId, EvalContext, EvalFile, EvalLine) ->
     catch _:_ ->
 	    ok
     end.
-	
+
 -ifdef(debug).
     is_debug_compiled() -> true.
 -else.
     is_debug_compiled() -> false.
--endif.   
-
-
+-endif.

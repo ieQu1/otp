@@ -3,7 +3,7 @@
 %%
 %% SPDX-License-Identifier: Apache-2.0
 %%
-%% Copyright Ericsson AB 1996-2025. All Rights Reserved.
+%% Copyright Ericsson AB 1996-2026. All Rights Reserved.
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -458,7 +458,8 @@ handle_call({negotiate_protocol, Nodes}, From, State) ->
     end;
 
 handle_call(init, _From, State) ->
-    _ = net_kernel:monitor_nodes(true),
+    NetKernel = get_env(net_kernel_module),
+    _ = NetKernel:monitor_nodes(true),
     EarlyNodes = State#state.early_connects,
     State2 = State#state{tm_started = true},
     {reply, EarlyNodes, State2};
@@ -747,6 +748,8 @@ default_env(send_compressed) ->
     0;
 default_env(max_transfer_size) ->
     64000;
+default_env(net_kernel_module) ->
+    mnesia_net_kernel;
 default_env(schema) ->
     [].
 
@@ -797,7 +800,8 @@ do_check_type(no_table_loaders, N) when is_integer(N), N > 0 -> N;
 do_check_type(dc_dump_limit,N) when is_number(N), N > 0 -> N;
 do_check_type(send_compressed, L) when is_integer(L), L >= 0, L =< 9 -> L;
 do_check_type(max_transfer_size, N) when is_integer(N), N > 0 -> N;
-do_check_type(schema, L) when is_list(L) -> L.
+do_check_type(schema, L) when is_list(L) -> L;
+do_check_type(net_kernel_module, M) when is_atom(M) -> M.
 
 bool(true) -> true;
 bool(false) -> false.
