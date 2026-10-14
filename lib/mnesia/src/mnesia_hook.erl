@@ -24,6 +24,7 @@
 
 -export([
          register_hook/2,
+         unregister_hook/1,
          do_post_commit/2
         ]).
 
@@ -40,10 +41,17 @@
 
 -type post_commit_hook() :: fun((_Tid, post_commit_hook_data()) -> ok).
 
--spec register_hook(post_commit, post_commit_hook()) -> ok | {error, term()}.
+-spec register_hook(post_commit, post_commit_hook()) -> ok | {error, bad_type}.
 register_hook(post_commit, Hook) when is_function(Hook, 2) ->
     persistent_term:put(?hook(post_commit), Hook);
 register_hook(_, _) ->
+    {error, bad_type}.
+
+-spec unregister_hook(post_commit) -> ok | {error, bad_type}.
+unregister_hook(post_commit) ->
+    _ = persistent_term:erase(?hook(post_commit)),
+    ok;
+unregister_hook(_) ->
     {error, bad_type}.
 
 -spec do_post_commit(_Tid, #commit{}) -> ok.
