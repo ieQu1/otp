@@ -1329,23 +1329,6 @@ ensure_non_empty({Tab, Vhat}) ->
         _ -> ok
     end.
 
-%% FIXME: this is a brute-force solution to the problem of removing a
-%% node from the cluster if it happens to be running. Proper solution
-%% should prohibit a node that left the cluster from appearing in
-%% `active_replicas' in the first place.
-%%
-%% ensure_not_active(Tab = schema, Node) ->
-%%     Active = val({Tab, active_replicas}),
-%%     case lists:member(Node, Active) of
-%% 	false when Active =/= [] ->
-%% 	    ok;
-%% 	false ->
-%% 	    mnesia:abort({no_exists, Tab});
-%% 	true ->
-%% 	    Expl = "Mnesia is running",
-%% 	    mnesia:abort({active, Expl, Node})
-%%     end.
-
 is_remote_member(Key) ->
     IsActive = lists:member(node(), val(Key)),
     {IsActive, node()}.
@@ -1752,8 +1735,7 @@ make_del_table_copy(Tab, Node) ->
             dbg_out("Last replica deleted in table ~tp~n",  [Tab]),
             make_delete_table(Tab,  whole_table);
         _ when Tab == schema ->
-	    %% ensure_active(Cs2),
-	    %% ensure_not_active(Tab, Node),
+            ?CATCH(mnesia_controller:del_active_replica(schema, Node)),
             Cs3 = verify_cstruct(Cs2),
 	    Ops = remove_node_from_tabs(val({schema, tables}), Node),
 	    [{op, del_table_copy, ram_copies, Node, vsn_cs2list(Cs3)} | Ops];
